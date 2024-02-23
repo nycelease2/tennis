@@ -92,6 +92,18 @@ def updateScreen():
     P1.draw()
     P2.draw()
     ball.draw()
+    
+    pygame.draw.rect(screen, (30,30,30), (250,0, 5, G_height))
+    
+    #SCORE DISPLAY STUFF
+    font = pygame.font.Font('freesansbold.ttf', 32)
+
+    text = font.render("1: "+str(player1Score)+"|2: "+str(player2Score), True, (255,255,255), (108,147,92))
+    textRect = text.get_rect()
+
+    textRect.center = (G_width//2, G_height//2)
+    screen.blit(text, textRect)
+    
 
 def checkWin(ball, player1Score, player2Score):
     won = False
@@ -143,7 +155,7 @@ while running:
             elif event.key == pygame.K_s:
                 P1.yVel = 0
 
-    screen.fill((30,30,30))
+    screen.fill((108,147,92))
     updateScreen()
     player1Score, player2Score = checkWin(ball, player1Score, player2Score)
     pygame.display.update()
