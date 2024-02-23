@@ -7,7 +7,7 @@ player2Score = 0
 
 
 #create canvas
-G_height, G_width = 500, 500
+G_height, G_width = 700, 700
 pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((G_height,G_width))
@@ -55,7 +55,7 @@ class player2:
             self.yvel = 0
             self.rect = pygame.draw.rect(screen, (0,0,255) ,(self.x, self.y, self.xs, self.ys))
 
-P2 = player1(490, 250, 10, 50)
+P2 = player1(G_width-10, 250, 10, 50)
 
 
 class BALL:
@@ -93,7 +93,8 @@ def updateScreen():
     P2.draw()
     ball.draw()
     
-    pygame.draw.rect(screen, (30,30,30), (250,0, 5, G_height))
+    #middle line
+    pygame.draw.rect(screen, (30,30,30), (G_width/2,0, 5, G_height))
     
     #SCORE DISPLAY STUFF
     font = pygame.font.Font('freesansbold.ttf', 32)
@@ -109,16 +110,10 @@ def checkWin(ball, player1Score, player2Score):
     won = False
     if ball.x < 0:
         player2Score += 1
-        print("Player 1: "+str(player1Score))
-        print("Player 2: "+str(player2Score))
-        print("\n\n\n\n")
         won = True
 
     elif ball.x > G_width:
         player1Score += 1
-        print("Player 1: "+str(player1Score))
-        print("Player 2: "+str(player2Score))
-        print("\n\n\n\n")
         won = True
 
     if won:
