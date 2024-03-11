@@ -10,7 +10,6 @@ screen = pygame.display.set_mode((G_height,G_width))
 #title
 pygame.display.set_caption("Tennis")
 
-
 #PLAYER SETUP
 class player1:
     def __init__(self, x, y, xS, yS):
@@ -65,7 +64,7 @@ class BALL:
         self.Xvel = 5
         self.Yvel = 3
         self.rect = pygame.draw.rect(screen, (255,255,255), (self.x, self.y, self.Xs, self.Ys))
-    
+
     def draw(self):
         self.x += self.Xvel
         self.y += self.Yvel
@@ -74,7 +73,7 @@ class BALL:
         #HIT TOP/BOTTOM OF SCREEN
         if self.y <= 0 or self.y > G_height-self.Ys:
             self.Yvel *= -1
-        
+
         #HIT A PLAYER
         elif self.rect.colliderect(P2.rect) or self.rect.colliderect(P1.rect):
             if self.x-50 < 0:
@@ -82,50 +81,50 @@ class BALL:
             else:
                 self.x -= 10
             self.Xvel *= -1
-        
+
         self.rect = pygame.draw.rect(screen, (255,255,255) ,(self.x, self.y, self.Xs, self.Ys))
-           
+
 ball = BALL(G_width/2 ,G_height/2 ,10,10)
 
 
-def updateScreen():
+def updateScreen(running):
     P1.draw()
     P2.draw()
     ball.draw()
-    
+
     #middle line
     pygame.draw.rect(screen, (30,30,30), (G_width/2,0, 5, G_height))
-    
+
     #SCORE DISPLAY STUFF
-    if P1.score == 15:
-        font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render("PLAYER 1 WON!", True, (255,255,255), (108,147,92))
-        textRect = text.get_rect()
+    if running:
+        if P1.score == 15:
+            font = pygame.font.Font('freesansbold.ttf', 32)
+            text = font.render("PLAYER 1 WON!", True, (255,255,255), (108,147,92))
+            textRect = text.get_rect()
 
-        textRect.center = (G_width//2, G_height//2)
-        screen.blit(text, textRect)
-        running = False
-        return running
-    elif P2.score == 15:
-        font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render("PLAYER 2 WON!", True, (255,255,255), (108,147,92))
-        textRect = text.get_rect()
+            textRect.center = (G_width//2, G_height//2)
+            screen.blit(text, textRect)
+            running = False
+            return running
+        elif P2.score == 15:
+            font = pygame.font.Font('freesansbold.ttf', 32)
+            text = font.render("PLAYER 2 WON!", True, (255,255,255), (108,147,92))
+            textRect = text.get_rect()
 
-        textRect.center = (G_width//2, G_height//2)
-        screen.blit(text, textRect)
-        running = False
-        return running
-    else:
-        font = pygame.font.Font('freesansbold.ttf', 32)
+            textRect.center = (G_width//2, G_height//2)
+            screen.blit(text, textRect)
+            running = False
+            return running
+        else:
+            font = pygame.font.Font('freesansbold.ttf', 32)
 
-        text = font.render("1: "+str(P1.score)+"|2: "+str(P2.score), True, (255,255,255), (108,147,92))
-        textRect = text.get_rect()
+            text = font.render("1: "+str(P1.score)+"|2: "+str(P2.score), True, (255,255,255), (108,147,92))
+            textRect = text.get_rect()
 
-        textRect.center = (G_width//2, G_height//2)
-        screen.blit(text, textRect)
-        running=True
-        return running
-    
+            textRect.center = (G_width//2, G_height//2)
+            screen.blit(text, textRect)
+            running=True
+            return running
 
 def checkWin(ball, P1, P2):
     won = False
@@ -148,6 +147,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
         #INPUT FOR MOVEMENT
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
@@ -158,6 +158,8 @@ while running:
                 P1.yVel -= 6
             elif event.key == pygame.K_s:
                 P1.yVel += 6
+            elif event.key == pygame.K_SPACE:
+                running = False
 
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
@@ -171,9 +173,6 @@ while running:
 
     screen.fill((108,147,92))
     checkWin(ball, P1, P2)
-    running = updateScreen()
+    running = updateScreen(running)
     pygame.display.update()
     clock.tick(60)
-
-    if running == False:
-        pygame.time.wait(2000)
